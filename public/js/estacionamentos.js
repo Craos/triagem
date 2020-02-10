@@ -3,7 +3,7 @@ class Estacionamentos {
     lista(callback) {
         $.ajax({
             type: "GET",
-            url: 'http://anima.craos.net/triagem/estacionamentos',
+            url: window.config.endpoint + '/triagem/estacionamentos',
             dataType: "json",
             success: function (response) {
                 callback(response);
@@ -15,7 +15,7 @@ class Estacionamentos {
     Situacao(callback) {
         $.ajax({
             type: "GET",
-            url: 'http://anima.craos.net/triagem/situacao',
+            url: window.config.endpoint + '/triagem/situacao',
             dataType: "json",
             success: function (response) {
                 callback(response);
