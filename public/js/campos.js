@@ -74,7 +74,7 @@ const barradeComandosRapidos = [
         innerText: 'Condôminos',
         campos: formAutorizacaoMorador,
         img: 'img/expresso/condominos.png',
-        endpoint: 'http://anima.craos.net/triagem/autorizacao_condomino?select=id'
+        endpoint: '/triagem/autorizacao_condomino?select=id'
     },
     {
         id:'autoriza-assistencias',
@@ -82,17 +82,16 @@ const barradeComandosRapidos = [
         campos: formAutorizacaoServicos,
         img: 'img/expresso/socorro_mecanico.png',
         print: true,
-        endpoint: 'http://anima.craos.net/triagem/autorizacao_servicos?select=id'
+        endpoint: '/triagem/autorizacao_servicos?select=id'
     },
     {
         id:'autoriza-escolar',
         innerText: 'Transporte escolar',
         img: 'img/expresso/transporte_escolar.png',
         data:{
-            uidins: 'oberdan',
             tipo_acesso: 13
         },
-        endpoint: 'http://anima.craos.net/triagem/autorizacao_expressa?select=id'
+        endpoint: '/triagem/autorizacao_expressa?select=id'
     },
     {
         id:'autoriza-entregas',
@@ -100,16 +99,15 @@ const barradeComandosRapidos = [
         img: 'img/expresso/correspondencia.png',
         campos: formAutorizacaoServicos,
         print: true,
-        endpoint: 'http://anima.craos.net/triagem/autorizacao_servicos?select=id'
+        endpoint: '/triagem/autorizacao_servicos?select=id'
     },
     {
         id:'autoriza-emergencia',
         innerText: 'Emergência',
         img: 'img/expresso/emergencias.png',
         data:{
-            uidins: 'oberdan',
             tipo_acesso: 14
         },
-        endpoint: 'http://anima.craos.net/triagem/autorizacao_expressa?select=id'
+        endpoint: '/triagem/autorizacao_expressa?select=id'
     }
 ];
