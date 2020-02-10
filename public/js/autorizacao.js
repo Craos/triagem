@@ -38,11 +38,11 @@ class autorizacao {
                 return;
 
             let data = form.getFormData();
-            data.uidins = 'oberdan';
+            data.uidins = window.user.username;
 
             $.ajax({
                 type: "POST",
-                url: this.comando.endpoint,
+                url: window.config.endpoint + this.comando.endpoint,
                 dataType: "json",
                 headers: {
                     Prefer: "return=representation",
@@ -72,9 +72,11 @@ class autorizacao {
 
     RegistrarExpresso() {
 
+        this.comando.data.uidins = window.user.username;
+
         $.ajax({
             type: "POST",
-            url: this.comando.endpoint,
+            url: window.config.endpoint + this.comando.endpoint,
             dataType: "json",
             headers: {
                 Prefer: "return=representation",
@@ -105,7 +107,7 @@ class autorizacao {
 
             $.ajax({
                 type: "POST",
-                url: 'http://anima.craos.net/triagem/autorizacao_diversos',
+                url: window.config.endpoint + '/triagem/autorizacao_diversos',
                 dataType: "json",
                 headers: {
                     Prefer: "return=representation",
@@ -132,7 +134,7 @@ class autorizacao {
 
             $.ajax({
                 type: "POST",
-                url: 'http://anima.craos.net/triagem/autorizacao_pessoas?select=id,documento,nome',
+                url: window.config.endpoint + '/triagem/autorizacao_pessoas?select=id,documento,nome',
                 dataType: "json",
                 headers: {
                     Prefer: "return=representation",
@@ -157,7 +159,7 @@ class autorizacao {
         return new Promise(((resolve, reject) => {
             $.ajax({
                 type: "PATCH",
-                url: 'http://anima.craos.net/triagem/vagas?numero=eq.' + this.vaga.numero,
+                url: window.config.endpoint + '/triagem/vagas?numero=eq.' + this.vaga.numero,
                 dataType: "json",
                 headers: {
                     Prefer: "return=representation",
