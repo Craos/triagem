@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Condomínio Ânima</title>
+    <link type="text/css" rel="stylesheet" href="../css/bilhete.css">
+    <script type="text/javascript" src="../js/JsBarcode.all.min.js"></script>
+</head>
+<body>
+<div id="info">
+    <div id="codigo">
+        <svg id="barcode"></svg>
+    </div>
+    <div>Data:<span id="data"></span></div>
+    <div>Bloco:<span id="bloco"></span> Unidade: <span id="unidade"></span></div>
+    <div id="tipo_vaga"></div>
+    <div id="nometipoacesso"></div>
+    <div id="nomeestacionamento"></div>
+    <div>Vaga: <span id="vaga"></span></div>
+</div>
+</body>
+<script>
+
+    function barcode(code) {
+
+        JsBarcode("#barcode").EAN8(code, {
+            fontSize: 18,
+            width: 3,
+            height: 150,
+            fontOptions: "bold",
+            flat: true,
+            textMargin: 0
+        }).render();
+
+    }
+
+    window.print();
+    window.onafterprint = function () {
+        window.close();
+    }
+</script>
+</html>

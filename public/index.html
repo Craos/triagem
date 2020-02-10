@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>User Manager — Verticals</title>
+    <script type="text/javascript" src="http://anima.craos.net:8443/vllibs/public/lib/dhtmlx/codebase/dhtmlx.js"></script>
+    <script type="text/javascript" src="http://anima.craos.net:8443/vllibs/public/lib/jquery/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="http://anima.craos.net:8443/vllibs/public/lib/moment/moment.js"></script>
+    <script type="text/javascript" src="http://anima.craos.net:8443/vllibs/public/lib/moment/locale/pt-br.js"></script>
+    <script type="text/javascript" src="http://anima.craos.net:8443/vllibs/public/oauth/oauth.js"></script>
+    <script type="text/javascript" src="http://anima.craos.net:8443/vllibs/public/adm/adm.js" ></script>
+    <link rel="stylesheet" type="text/css" href="http://anima.craos.net:8443/vllibs/public/lib/dhtmlx/codebase/fonts/font_awesome/css/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="http://anima.craos.net:8443/vllibs/public/lib/dhtmlx/skins/material/dhtmlx.css">
+    <link type="text/css" rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <template id="tpl-commands">
+        <input type="button" id="autoriza-condominos" class="autorizacao-rapida" value="Condôminos">
+        <input type="button" id="autoriza-entregas" class="autorizacao-rapida" value="Entregas">
+        <input type="button" id="autoriza-expressa" class="autorizacao-rapida" value="Autorizações expressas">
+    </template>
+</body>
+<script type="text/javascript" src="js/condomino.js"></script>
+<script type="text/javascript" src="js/autorizacao.js"></script>
+<script type="text/javascript" src="js/screencast.js"></script>
+<script type="text/javascript" src="js/tipoacesso.js"></script>
+<script type="text/javascript" src="js/campos.js"></script>
+<script type="text/javascript" src="js/painel.js"></script>
+<script type="text/javascript" src="js/triagem.js"></script>
+<script type="text/javascript" src="js/bilhete.js"></script>
+<script type="text/javascript" src="js/estacionamentos.js"></script>
+<script type="text/javascript" src="js/vagas.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+<script>
+
+    window.onload = function() {
+        let config = {
+            endpoint: 'http://anima.craos.net:8443/oauth',
+            login: {
+                endpoint: 'http://anima.craos.net:8443',
+                form: '/vllibs/public/oauth/oauthlocal.html?a=l&c=triagem',
+            }
+        };
+
+        if (!sessionStorage.user) {
+            new VerticalsOauth(config).avaliaAcesso();
+        } else {
+            new App();
+        }
+    };
+
+</script>
+</html>
