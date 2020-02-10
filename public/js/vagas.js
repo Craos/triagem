@@ -57,7 +57,7 @@ class Vaga {
         return new Promise(((resolve, reject) => {
             $.ajax({
                 type: "POST",
-                url: 'http://anima.craos.net/triagem/rpc/liberar',
+                url: window.config.endpoint + '/triagem/rpc/liberar',
                 dataType: "json",
                 headers: {
                     Prefer: "return=representation",
