@@ -5,7 +5,7 @@ class Condomino {
         return new Promise(((resolve, reject) => {
             $.ajax({
                 type: "GET",
-                url: 'http://anima.craos.net/triagem/pesquisa_condomino?placa=eq.' + placa,
+                url: window.config.endpoint + '/triagem/pesquisa_condomino?placa=eq.' + placa,
                 dataType: "json",
                 headers: {
                     Accept: "application/vnd.pgrst.object+json"
