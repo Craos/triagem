@@ -2,6 +2,8 @@ class Triagem {
 
     Iniciar() {
 
+        this.inicio = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
+
         let winAt = new dhtmlXWindows({
             image_path: "codebase/imgs/"
         });
@@ -95,10 +97,12 @@ class Triagem {
 
             winAt.window("winautorizar").progressOn();
             let info = form.getFormData();
+            info.inicio = this.inicio;
+            info.final = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
             info.estacionamento = this.data.estacionamento;
             info.vaga = this.data.numero;
             info.autenticacao = this.Autenticacao;
-            info.uidins = 'oberdan';
+            info.uidins = window.user.username;
 
             this._autorizacao = new autorizacao();
             this._autorizacao.veiculo = info;
@@ -250,7 +254,7 @@ class Triagem {
             let info = form.getFormData();
             info.foto = this.foto;
             info.autorizacao = this.id;
-            info.uidins = 'oberdan';
+            info.uidins = window.user.username;
 
             this._autorizacao.pessoa = info;
             this._autorizacao.RegistraDiversoPessoa().then(response => {
