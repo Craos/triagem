@@ -2,6 +2,10 @@ let tiposdeacesso, listaestacionamentos;
 
 let App = function () {
 
+    /**
+     * @todo Verificar a atualização do painel que está desaparecendo
+     * @param buttons
+     */
     this.criabarradeComandos = function(buttons) {
 
         buttons.filter(function (item) {
