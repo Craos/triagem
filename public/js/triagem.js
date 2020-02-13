@@ -2,7 +2,7 @@ class Triagem {
 
     Iniciar() {
 
-        this.inicio = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
+        this.inicioautorizacao = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
 
         let winAt = new dhtmlXWindows({
             image_path: "codebase/imgs/"
@@ -12,7 +12,7 @@ class Triagem {
 
         winAt.createWindow({
             id: winat,
-            width: 310,
+            width: 360,
             height: 220,
             center: true,
             caption: "Registro de autorização"
@@ -22,26 +22,23 @@ class Triagem {
         winAt.window(winat).denyPark();
         winAt.window(winat).denyResize();
 
+
         winAt.window("winautorizar").attachToolbar({
             icon_path: 'img/comandos/',
             items: [
                 {id: "salvar", type: "button", text: "Salvar", img: "salvar.png"},
                 {id: "sep1", type: "separator"},
-                {id: "liberar", type: "button", text: "Liberar a vaga", img: "liberar.png"}
+                {id: "impressao", type: "button", text: "Imprimir", img: "imprimir.png", disabled: (this.data.autenticacao === null)},
+                {id: "sep1", type: "separator"},
+                {id: "liberar", type: "button", text: "Liberar a vaga", img: "liberar.png", disabled: (this.data.autenticacao === null)}
             ],
             onClick: function (id) {
                 if (id === 'salvar') {
                     form.validate();
                 } else if (id === 'liberar') {
-                    new Vaga().Liberar(this.data.num).then(response => {
-                            winAt.window("winautorizar").close();
-                            document.dispatchEvent(new CustomEvent('AoAlterarVaga', {
-                                detail: {
-                                    Vaga: response
-                                }
-                            }))
-                        }
-                    );
+                    this.LiberarVaga().then(winAt.window("winautorizar").close());
+                } else if (id === 'impressao') {
+                    this.SolicitarImpressao();
                 }
 
             }.bind(this)
@@ -97,7 +94,7 @@ class Triagem {
 
             winAt.window("winautorizar").progressOn();
             let info = form.getFormData();
-            info.inicio = this.inicio;
+            info.inicio = this.inicioautorizacao;
             info.final = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
             info.estacionamento = this.data.estacionamento;
             info.vaga = this.data.numero;
@@ -160,7 +157,40 @@ class Triagem {
 
     }
 
+    LiberarVaga() {
+        return new Promise((resolve) => {
+            new Vaga().Liberar(this.data.num).then(response => {
+                    document.dispatchEvent(new CustomEvent('AoAlterarVaga', {
+                        detail: {
+                            Vaga: response
+                        }
+                    }));
+                    resolve();
+                }
+            );
+        });
+    }
+
+    SolicitarImpressao() {
+
+        let bilhete = new Bilhete();
+        bilhete.data = {
+            data: this.data.entrada,
+            inicio: this.inicioautorizacao,
+            final: window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s'),
+            est_bloco: this.data.bloco,
+            est_unidade: this.data.unidade,
+            tipo: this.data.tipo,
+            numero: this.data.numero,
+            autenticacao: this.data.autenticacao
+        };
+
+        bilhete.Imprimir(this.data.tipoacesso, this.data.nomeestacionamento);
+    }
+
     AdicionarPessoas() {
+
+        this.inicio = window.dhx.date2str(new Date(), '%d/%m/%Y %H:%i:%s');
 
         let winAdd = new dhtmlXWindows({
             image_path: "codebase/imgs/"
@@ -259,11 +289,15 @@ class Triagem {
             this._autorizacao.pessoa = info;
             this._autorizacao.RegistraDiversoPessoa().then(response => {
                 form.clear();
-                this.grid.addRow(this.grid.uid(), [response.id, response.documento, response.nome]);
+                this.grid.addRow(response.documento, [response.id, response.documento, response.nome]);
                 toolbar.enableItem('finalizar');
-            }).finally(
-                layout.cells('a').progressOff()
-            );
+            }).finally(() => {
+                layout.cells('a').progressOff();
+                info = null;
+                this.foto = null;
+                this.inicio = window.dhx.date2str(new Date(), '%d/%m/%Y %H:%i:%s');
+
+            });
         }.bind(this));
 
         this.grid = layout.cells('b').attachGrid();
@@ -289,8 +323,13 @@ class Triagem {
             let bilhete = new Bilhete();
             bilhete.data = response;
             bilhete.data.data = window.dhx.date2str(new Date(), '%d/%m/%Y %H:%i:%s');
-            console.debug(bilhete.data);
-            bilhete.Imprimir();
+            bilhete.data.inicio = this.inicioautorizacao;
+            bilhete.data.final = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
+            bilhete.Registrar().then(() => {
+                bilhete.Imprimir();
+            });
+
+
         });
 
     }
