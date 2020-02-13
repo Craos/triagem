@@ -285,6 +285,13 @@ class Triagem {
             info.foto = this.foto;
             info.autorizacao = this.id;
             info.uidins = window.user.username;
+            info.inicio = this.inicio;
+            info.final = window.dhx.date2str(new Date(), '%d/%m/%Y %H:%i:%s');
+
+            if (this.grid.doesRowExist(info.documento)) {
+                layout.cells('a').progressOff();
+                return;
+            }
 
             this._autorizacao.pessoa = info;
             this._autorizacao.RegistraDiversoPessoa().then(response => {
