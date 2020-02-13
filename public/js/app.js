@@ -71,13 +71,10 @@ let App = function () {
     this.carregaParametros();
 
     this.atualizaPainel = function() {
-        console.debug('atualizaPainel');
         layout.attachEvent('onContentLoaded', function (id) {
-            console.debug('página carregada');
             new Painel().Montar(layout.cells(id).getFrame());
         });
         layout.cells('a').attachURL('html/painel.html');
-        console.info(new Date(), 'Atualização do painel');
     };
 
     document.addEventListener('AoAlterarVaga', this.atualizaPainel);
