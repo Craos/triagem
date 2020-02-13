@@ -2,6 +2,8 @@ class autorizacao {
 
     RegistrarComForm() {
 
+        this.inicio = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
+
         let winAt = new dhtmlXWindows({
             image_path: "codebase/imgs/"
         });
@@ -32,6 +34,11 @@ class autorizacao {
 
         let form = winAt.window("winautorizar").attachForm(this.comando.campos);
 
+        form.attachEvent('onKeyUp', function (inp, ev, name) {
+            if (name === 'placa' || name === 'nome')
+                form.setItemValue(name, form.getItemValue(name).toUpperCase());
+        });
+
         form.attachEvent("onAfterValidate", function (status) {
 
             if (!status)
@@ -39,6 +46,8 @@ class autorizacao {
 
             let data = form.getFormData();
             data.uidins = window.user.username;
+            data.inicio = this.inicio;
+            data.final = window.dhx.date2str(new Date(), '%Y-%m-%d %H:%i:%s');
 
             $.ajax({
                 type: "POST",
