@@ -1,12 +1,12 @@
 const formAutorizacaoAdicao = [
     {type: 'settings', labelAlign: 'right', position: 'label-left', inputWidth: 170, offsetTop: 0, labelWidth: 80},
     {type: "block", offsetTop: 10, width:300, list:[
-        {type: "input", name: "placa", label: "Placa:", maxLength: 7, labelWidth: 80, validate: "ValidAplhaNumeric", required: true},
+        {type: "input", name: "placa", label: "Placa:", maxLength: 7, labelWidth: 80, validate: "validatePlate", required: true},
     ]},
     {type: "block", width:300, list:[
         {type: "input", name: "bloco", maxLength: 2, validate: "ValidNumeric", label: "Unidade:", required: true, inputWidth: 72},
         {type: "newcolumn", offset: 0},
-        {type: "input", name: "unidade", maxLength: 3, validate: "ValidNumeric",label: "-", required: true, labelWidth: 20, inputWidth: 72}
+        {type: "input", name: "unidade", maxLength: 3, validate: "ValidNumeric", label: "-", required: true, labelWidth: 20, inputWidth: 72}
     ]},
     {type: "block", width:300, list:[
         {type: "combo", name: "tipo_acesso", label: "Acesso:", required: true, inputWidth: 170}
@@ -19,7 +19,7 @@ const formAutorizacaoAdicionarPessoas = [
         {type: "input", name: "nome", label: "Nome:", required: true},
     ]},
     {type: "block", width:300, list:[
-        {type: "input", name: "documento", label: "Documento:", required: true},
+        {type: "input", name: "documento", label: "Documento:", required: true, validate: "validateDOC"},
         {type:"container", name:"instantaneo", inputWidth:100, inputHeight:100}
     ]},
     {type: "newcolumn", offset: 0},
@@ -29,10 +29,10 @@ const formAutorizacaoAdicionarPessoas = [
 const formAutorizacaoMorador = [
     {type: 'settings', labelAlign: 'right', position: 'label-left', inputWidth: 170, labelWidth: 70, offsetLeft: 0, offsetTop: 5},
     {type: "block", width:300, list:[
-        {type: "input", name: "placa", label: "Placa:", maxLength: 7, validate: "ValidAplhaNumeric", required: true}
+        {type: "input", name: "placa", label: "Placa:", maxLength: 7, validate: "validatePlate", required: true}
     ]},
     {type: "block", width:300, list:[
-        {type: "input", name: "nome", label: "Nome:", required: true}
+        {type: "input", name: "nome", label: "Nome:", required: true, validate: "validateName"}
     ]},
     {type: "block", width:300, list:[
         {type: "input", name: "bloco", maxLength: 2, validate: "ValidNumeric", label: "Torre:", required: true, inputWidth:50},
@@ -44,7 +44,7 @@ const formAutorizacaoMorador = [
 const formAutorizacaoServicos = [
     {type: 'settings', labelAlign: 'right', position: 'label-left', inputWidth: 170, labelWidth: 70, offsetLeft: 0, offsetTop: 5},
     {type: "block", width:300, list:[
-        {type: "input", name: "placa", label: "Placa:", maxLength: 7, validate: "ValidAplhaNumeric", required: true}
+        {type: "input", name: "placa", label: "Placa:", maxLength: 7, validate: "validatePlate", required: true}
     ]},
     {type: "block", width:300, list:[
         {type: "input", name: "nome", label: "Nome:", required: true}
