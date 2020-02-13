@@ -71,8 +71,9 @@ let App = function () {
     this.carregaParametros();
 
     this.atualizaPainel = function() {
-
+        console.debug('atualizaPainel');
         layout.attachEvent('onContentLoaded', function (id) {
+            console.debug('página carregada');
             new Painel().Montar(layout.cells(id).getFrame());
         });
         layout.cells('a').attachURL('html/painel.html');
@@ -83,4 +84,49 @@ let App = function () {
     setInterval(this.atualizaPainel, 550000);
     this.atualizaPainel();
 
+    this.ObterIPOrigem = function () {
+        $.ajax({
+            type: "GET",
+            url: window.config.endpoint + '/triagem/pesquisa_condomino?placa=eq.' + placa,
+            dataType: "json",
+            headers: {
+                Accept: "application/vnd.pgrst.object+json"
+            },
+            success: function (response) {
+                resolve(response);
+            }
+        });
+    }
+
 };
+
+const regexPlate = /^[a-zA-Z]{3}[0-9]{4}$/;
+const regexPlateMerc = /^[a-zA-Z]{3}[0-9]{1}[a-zA-Z]{1}[0-9]{2}$/;
+
+function validatePlate(plate) {
+
+    if (plate === undefined || plate === null || plate.length < 7) {
+        console.warn('Placa inválida');
+        return false;
+
+    } else if (regexPlate.test(plate)) {
+        console.warn('Placa válida (padrão atual)');
+        return true;
+
+    } else if (regexPlateMerc.test(plate)) {
+        console.warn('Placa válida (padrão mercosul)');
+        return true;
+
+    } else {
+        console.error('Placa inválida no padrão atual e mercosul');
+        return false;
+    }
+}
+
+function validateDOC(doc) {
+    return !(doc === undefined || doc === null || doc.length < 6);
+}
+
+function validateName(name) {
+    return !(name === undefined || name === null || name.length < 3);
+}
