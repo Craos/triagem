@@ -1,3 +1,5 @@
+let gridcorrente;
+
 class Triagem {
 
     Iniciar() {
@@ -30,7 +32,7 @@ class Triagem {
                 {id: "sep1", type: "separator"},
                 {id: "impressao", type: "button", text: "Imprimir", img: "imprimir.png", disabled: (this.data.autenticacao === null)},
                 {id: "sep1", type: "separator"},
-                {id: "liberar", type: "button", text: "Liberar a vaga", img: "liberar.png", disabled: (this.data.autenticacao === null)}
+                {id: "liberar", type: "button", text: "Liberar a vaga", img: "liberar.png", disabled: !(this.data.autenticacao !== null && window.user.userinfo.perfil > 2)}
             ],
             onClick: function (id) {
                 if (id === 'salvar') {
@@ -296,8 +298,36 @@ class Triagem {
             this._autorizacao.pessoa = info;
             this._autorizacao.RegistraDiversoPessoa().then(response => {
                 form.clear();
-                this.grid.addRow(response.documento, [response.id, response.documento, response.nome]);
+                this.grid.detachEvent("onCellChanged");
+                console.debug(response);
+                this.grid.addRow(response.documento, ['<button class="grid-acao" onclick="RemoverRegistroVisitante('+response.documento+','+response.id+');">X</button>', response.id, response.documento, response.nome]);
                 toolbar.enableItem('finalizar');
+                this.grid.attachEvent("onCellChanged", function (rId, cInd, nValue) {
+
+                    let dados = {documento: nValue};
+                    if (cInd === 2)
+                        dados = {nome: nValue};
+
+                    this._autorizacao.AtualizaRegistraPessoa(parseInt(this.grid.cells(rId, 0).getValue()), dados);
+
+                }.bind(this));
+
+                this.grid.attachEvent("onKeyPress", function(code,cFlag,sFlag) {
+
+                    if (code === 16)
+                        this.code = 16;
+
+                    if (code === 8 && this.code === 16) {
+                        this.code = null;
+                        console.debug('deletar a linha');
+
+                        let rowId = this.grid.getSelectedRowId();
+                        this._autorizacao.RemovePessoa(parseInt(this.grid.cells(rowId, 0).getValue())).then(this.grid.deleteRow(rowId));
+
+                    }
+
+                    console.debug(code,cFlag,sFlag);
+                }.bind(this));
             }).finally(() => {
                 layout.cells('a').progressOff();
                 info = null;
@@ -308,11 +338,13 @@ class Triagem {
         }.bind(this));
 
         this.grid = layout.cells('b').attachGrid();
-        this.grid.setHeader('id,Documento,Nome');
-        this.grid.setInitWidths('0,200,');
-        this.grid.setColTypes('ro,ro,ro');
-        this.grid.setColSorting('str,str,str');
+        this.grid.setHeader(',id,Documento,Nome');
+        this.grid.setColumnIds("acao,id,documento,nome");
+        this.grid.setInitWidths('55,0,200,');
+        this.grid.setColTypes('ro,ro,ed,ed');
         this.grid.init();
+
+        gridcorrente = this.grid;
 
     }
 
@@ -340,4 +372,8 @@ class Triagem {
         });
 
     }
+}
+
+function RemoverRegistroVisitante(rId, id) {
+    new autorizacao().RemovePessoa(id).then(gridcorrente.deleteRow(rId))
 }
