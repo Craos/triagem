@@ -164,6 +164,61 @@ class autorizacao {
         });
     }
 
+    AtualizaRegistraPessoa(id, dados) {
+
+        return new Promise((resolve, reject) => {
+
+            $.ajax({
+                type: "PATCH",
+                url: window.config.endpoint + '/triagem/autorizacao_pessoas?id=eq.'+id+'&select=id',
+                dataType: "json",
+                headers: {
+                    Prefer: "return=representation",
+                    Accept: "application/vnd.pgrst.object+json"
+                },
+                success: function (response) {
+                    resolve(response);
+                },
+                data: dados
+            }).fail(function (jqXHR) {
+                dhtmlx.alert({
+                    title: 'Atenção',
+                    type: 'alert-error',
+                    text: jqXHR.responseJSON.message
+                });
+                reject(new Error("Deu erro"));
+            });
+        });
+    }
+
+    RemovePessoa(id) {
+
+        return new Promise((resolve, reject) => {
+
+            $.ajax({
+                type: "DELETE",
+                url: window.config.endpoint + '/triagem/autorizacao_pessoas?id=eq.'+id,
+                dataType: "json",
+                headers: {
+                    Prefer: "return=representation",
+                    Accept: "application/vnd.pgrst.object+json"
+                },
+                success: function (response) {
+                    resolve(response);
+                }
+            }).fail(function (jqXHR) {
+                dhtmlx.alert({
+                    title: 'Atenção',
+                    type: 'alert-error',
+                    text: jqXHR.responseJSON.message
+                });
+                reject(new Error("Deu erro"));
+            });
+        });
+    }
+
+
+
     OcupaVaga() {
         return new Promise(((resolve, reject) => {
             $.ajax({

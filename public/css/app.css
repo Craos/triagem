@@ -44,3 +44,16 @@ html, body {
 #instantaneo {
     width: 200px;
 }
+
+.grid-acao {
+    height: 28px;
+    line-height: 28px;
+    color: gray;
+    width: 30px;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    border: 1px solid
+    #d9d9d9;
+    color: #cc0069;
+}
