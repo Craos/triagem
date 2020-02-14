@@ -1,99 +1,107 @@
 let tiposdeacesso, listaestacionamentos;
+let layoutprincipal, siderbar, user;
 
 let App = function () {
 
-    /**
-     * @todo Verificar a atualização do painel que está desaparecendo
-     * @param buttons
-     */
-    this.criabarradeComandos = function(buttons) {
+    this.start = function() {
 
-        buttons.filter(function (item) {
-
-            let img = document.createElement('img');
-            img.src = item.img;
-            img.className = 'autorizacao-rapida-img';
-
-            let span = document.createElement('span');
-            span.innerText = item.innerText;
-            span.className = 'autorizacao-rapida-span';
-
-            let button = document.createElement('button');
-            button.id = item.id;
-            button.appendChild(img);
-            button.appendChild(span);
-            button.className = 'autorizacao-rapida';
-            button.onclick = function () {
-
-                let _autorizacao = new autorizacao();
-                _autorizacao.comando = item;
-
-                if (item.campos !== undefined) {
-                    _autorizacao.RegistrarComForm();
-                } else {
-                    _autorizacao.RegistrarExpresso();
-                }
-
-            };
-            document.querySelectorAll('.dhx_cell_hdr_text')[0].appendChild(button);
-        })
-    };
-
-    let layout = new dhtmlXLayoutObject({
-        parent: document.body,
-        pattern: '1C',
-        offsets: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-        },
-        cells: [
-            {
-                id: 'a'
-            }
-        ]
-    });
-
-    layout.cells('a').setText('');
-    this.criabarradeComandos(barradeComandosRapidos);
-
-    this.carregaParametros = function() {
-        new Tipoacesso().listar(function (response) {
-            tiposdeacesso = response;
-        });
-
-        new Estacionamentos().lista(function (response) {
-            listaestacionamentos = response;
-        })
-    };
-
-    this.carregaParametros();
-
-    this.atualizaPainel = function() {
-        layout.attachEvent('onContentLoaded', function (id) {
-            new Painel().Montar(layout.cells(id).getFrame());
-        });
-        layout.cells('a').attachURL('html/painel.html');
-    };
-
-    document.addEventListener('AoAlterarVaga', this.atualizaPainel);
-    setInterval(this.atualizaPainel, 550000);
-    this.atualizaPainel();
-
-    this.ObterIPOrigem = function () {
-        $.ajax({
-            type: "GET",
-            url: window.config.endpoint + '/triagem/pesquisa_condomino?placa=eq.' + placa,
-            dataType: "json",
-            headers: {
-                Accept: "application/vnd.pgrst.object+json"
+        layoutprincipal = new dhtmlXLayoutObject({
+            parent: document.body,
+            pattern: '1C',
+            offsets: {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
             },
-            success: function (response) {
-                resolve(response);
-            }
+            cells: [
+                {
+                    id: 'a'
+                }
+            ]
         });
-    }
+
+        siderbar = layoutprincipal.cells('a').attachSidebar({
+            template: 'icons',
+            icons_path: 'img/siderbar/',
+            single_cell: false,
+            width: 50,
+            header: false,
+            autohide: false,
+            items: [
+                {
+                    id: 'dashboard',
+                    text: 'Dashboard',
+                    icon: 'dashboard.png',
+                    selected: false
+                },
+                {
+                    id: 'estacionamento',
+                    text: 'Estacionamento',
+                    icon: 'estacionamento.png',
+                    selected: true
+                },
+                {
+                    id: 'portaria',
+                    text: 'Portaria',
+                    icon: 'portaria.png',
+                    selected: false
+                },
+                {
+                    id: 'config',
+                    text: 'Configurações',
+                    icon: 'configuracoes.png',
+                    selected: false
+                }
+            ]
+        });
+
+        siderbar.attachEvent('onSelect', function (id) {
+
+            let cell = siderbar.cells(id);
+            layoutprincipal.cells('a').setText(siderbar.cells(id).getText().text);
+
+            if (id === 'dashboard') {
+
+            } else if (id === 'config') {
+
+            } else if (id === 'estacionamento') {
+
+            } else if (id === 'portaria') {
+
+            }
+
+        });
+
+        new ControleEstacionamento();
+
+        this.header();
+
+    };
+
+    this.header = function() {
+
+        let logo = document.createElement('div');
+        logo.className = 'app-header-user-logo';
+
+        let avatar = document.createElement('div');
+        avatar.className = 'app-header-user-avatar';
+
+        let img = document.createElement('img');
+        img.className = 'app-header-user-avatar-img';
+        img.src = window.user.userinfo.avatar;
+
+        avatar.appendChild(img);
+
+        let header = document.getElementsByClassName('dhx_cell_hdr')[0];
+        header.innerHTML = '';
+        header.className = 'app-header';
+        header.appendChild(logo);
+        header.appendChild(avatar);
+    };
+
+    this.start();
+
 
 };
 

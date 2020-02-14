@@ -111,3 +111,11 @@ const barradeComandosRapidos = [
         endpoint: '/triagem/autorizacao_expressa?select=id'
     }
 ];
+
+const barracomandosagilidade = [
+    {id: "autoriza-condominos", type: "button", text: "Condôminos", campos: formAutorizacaoMorador, img: "condominos.png", endpoint: '/triagem/autorizacao_condomino?select=id'},
+    {id: "autoriza-assistencias", type: "button", text: "Socorro Mecânico", campos: formAutorizacaoServicos, img: 'socorro_mecanico.png', endpoint: '/triagem/autorizacao_servicos?select=id', print: true},
+    {id: "autoriza-escolar", type: "button", text: "Transporte escolar", img: "transporte_escolar.png", endpoint: '/triagem/autorizacao_expressa?select=id', data:{tipo_acesso: 13}},
+    {id: "autoriza-entregas", type: "button", text: "Correspondência", campos: formAutorizacaoServicos, img: "correspondencia.png", endpoint: '/triagem/autorizacao_servicos?select=id', print: true},
+    {id: "autoriza-emergencia", type: "button", text: "Emergência", campos: formAutorizacaoServicos, img: "emergencias.png", endpoint: '/triagem/autorizacao_expressa?select=id',  data:{tipo_acesso: 14}},
+];
